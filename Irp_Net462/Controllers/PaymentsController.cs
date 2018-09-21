@@ -1,4 +1,5 @@
 ﻿using Irp_Net462.Models;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -36,7 +37,21 @@ namespace Irp_Net462.Controllers
 		public ActionResult Create()
 		{
 			ViewBag.PaymentCategoryID = new SelectList(db.PaymentCategories, "ID", "Name");
-			return View();
+
+			Payment newPayment = new Payment
+			{
+				Amount = 0.01F,
+				CounterCurrent = 0,
+				CounterPrev = 0,
+				CurrentTarif = 0.01F,
+				Order = "none",
+				OrderDate = DateTime.Now,
+				PaymentPeriod = DateTime.Now,
+				Receipt = "none",
+				ReceiptDate = DateTime.Now,
+			};
+
+			return View(newPayment);
 		}
 
 		// POST: Payments/Create
@@ -44,7 +59,7 @@ namespace Irp_Net462.Controllers
 		// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Create([Bind(Include = "ID,CounterCurrent,CounterPrev,Amount,CurrentTarif,OrderDate,ReceiptDate,Order,Receipt,PaymentCategoryID")] Payment payment)
+		public ActionResult Create([Bind(Include = "ID,CounterCurrent,CounterPrev,Amount,CurrentTarif,OrderDate,ReceiptDate,PaymentPeriod,Order,Receipt,PaymentCategoryID")] Payment payment)
 		{
 			if (ModelState.IsValid)
 			{
@@ -78,7 +93,7 @@ namespace Irp_Net462.Controllers
 		// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit([Bind(Include = "ID,CounterCurrent,CounterPrev,Amount,CurrentTarif,OrderDate,ReceiptDate,Order,Receipt,PaymentCategoryID")] Payment payment)
+		public ActionResult Edit([Bind(Include = "ID,CounterCurrent,CounterPrev,Amount,CurrentTarif,OrderDate,ReceiptDate,PaymentPeriod,Order,Receipt,PaymentCategoryID")] Payment payment)
 		{
 			if (ModelState.IsValid)
 			{

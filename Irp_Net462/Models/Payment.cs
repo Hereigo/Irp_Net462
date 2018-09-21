@@ -17,19 +17,29 @@ namespace Irp_Net462.Models
 		public int CounterPrev { get; set; }
 
 		[Required]
-		public decimal Amount { get; set; }
+		[DataType(DataType.Currency, ErrorMessage = "Format is 0.01")]
+		[DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = true)]
+		public float Amount { get; set; }
 
 		[Required]
-		public decimal CurrentTarif { get; set; }
+		[DataType(DataType.Currency, ErrorMessage = "Format is 0.01")]
+		[DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = true)]
+		public float CurrentTarif { get; set; }
 
 		[Required]
+		[DataType(DataType.Date)]
+		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
 		public DateTime OrderDate { get; set; }
 
-		//[Required]
-		//public DateTime PaymentPeriod { get; set; }
+		[Required]
+		[DataType(DataType.Date)]
+		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+		public DateTime ReceiptDate { get; set; }
 
 		[Required]
-		public DateTime ReceiptDate { get; set; }
+		[DataType(DataType.Date)]
+		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+		public DateTime PaymentPeriod { get; set; }
 
 		[Required]
 		public string Order { get; set; }

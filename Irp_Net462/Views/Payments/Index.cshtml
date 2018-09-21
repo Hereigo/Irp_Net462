@@ -4,78 +4,74 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.PaymentCategory.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CounterCurrent)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CounterPrev)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Amount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CurrentTarif)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OrderDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ReceiptDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Order)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Receipt)
-        </th>
-        <th></th>
-    </tr>
+	<tr>
+		<th>
+			Period
+		</th>
+		<th>
+			Destination
+		</th>
+		<th>
+			C.1
+		</th>
+		<th>
+			C.2
+		</th>
+		<th>
+			Amount
+		</th>
+		<th>
+			Tarif
+		</th>
+		<th>
+			Order date
+		</th>
+		<th>
+			Receipt date
+		</th>
+		<th></th>
+	</tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.PaymentCategory.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CounterCurrent)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CounterPrev)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Amount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CurrentTarif)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrderDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReceiptDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Order)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Receipt)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
+	<tr>
+		<td>
+			@item.PaymentPeriod.ToString("yyyy-MM")
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.PaymentCategory.Name)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.CounterPrev)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.CounterCurrent)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.Amount)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.CurrentTarif)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.OrderDate)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.ReceiptDate)
+		</td>
+		@*<td>
+			@Html.DisplayFor(modelItem => item.Order)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.Receipt)
+		</td>*@
+		<td>
+			@Html.ActionLink("Edit", "Edit", new { id = item.ID })
+		</td>
+	</tr>
 }
 
 </table>
