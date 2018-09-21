@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace Irp_Net462.Controllers
 {
+	[Authorize]
 	public class PaymentsController : Controller
 	{
 		private PaymentsContext db = new PaymentsContext();

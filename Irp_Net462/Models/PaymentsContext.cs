@@ -15,6 +15,10 @@ namespace Irp_Net462.Models
 		{
 		}
 
+		protected override void OnModelCreating(DbModelBuilder mb)
+		{
+		}
+
 		public DbSet<Irp_Net462.Models.PaymentCategory> PaymentCategories { get; set; }
 
 		public DbSet<Irp_Net462.Models.Payment> Payments { get; set; }
