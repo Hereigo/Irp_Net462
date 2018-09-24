@@ -1,8 +1,10 @@
 ﻿using Irp_Net462.Models;
 using System;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Irp_Net462.Controllers
@@ -60,15 +62,39 @@ namespace Irp_Net462.Controllers
 		// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Create([Bind(Include = "ID,CounterCurrent,CounterPrev,Amount,CurrentTarif,OrderDate,ReceiptDate,PaymentPeriod,Order,Receipt,PaymentCategoryID")] Payment payment)
+		public ActionResult Create(HttpPostedFileBase orderFile, HttpPostedFileBase receiptFile, [Bind(Include = "ID,CounterCurrent,CounterPrev,Amount,CurrentTarif,OrderDate,ReceiptDate,PaymentPeriod,Order,Receipt,PaymentCategoryID")] Payment payment)
 		{
 			if (ModelState.IsValid)
 			{
+				string category = db.PaymentCategories.Single(c => c.ID == payment.PaymentCategoryID).Name.ToString();
+
+				string catAndDate = $"{category}_{DateTime.Now.ToString("yyMMdd_HHmm")}";
+
+				if (orderFile.ContentLength > 0)
+				{
+					string orderFileName = $"{catAndDate}_O.{Path.GetExtension(orderFile.FileName)}";
+
+					string path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), orderFileName);
+
+					orderFile.SaveAs(path);
+
+					payment.Order = orderFileName;
+				}
+				if (receiptFile.ContentLength > 0)
+				{
+					string receiptFileName = $"{catAndDate}_R.{Path.GetExtension(receiptFile.FileName)}";
+
+					string path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), receiptFileName);
+
+					receiptFile.SaveAs(path);
+
+					payment.Receipt = receiptFileName;
+				}
+
 				db.Payments.Add(payment);
 				db.SaveChanges();
 				return RedirectToAction("Index");
 			}
-
 			ViewBag.PaymentCategoryID = new SelectList(db.PaymentCategories, "ID", "Name", payment.PaymentCategoryID);
 			return View(payment);
 		}
