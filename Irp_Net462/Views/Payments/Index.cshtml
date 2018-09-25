@@ -64,10 +64,16 @@
 				@Html.DisplayFor(modelItem => item.CurrentTarif)
 			</td>
 			<td>
-				@Html.ActionLink(item.OrderDate.ToString("dd.MM.yyyy"), "GetFile", "Payments", new { fileName = @Html.DisplayFor(modelItem => item.Order) }, new { @target = "_blank" })
+				@if (item.Order.ToString() != "none")
+				{
+					@Html.ActionLink(item.OrderDate.ToString("dd.MM.yyyy"), "GetFile", "Payments", new { fileName = @Html.DisplayFor(modelItem => item.Order) }, new { @target = "_blank" })
+				}
 			</td>
 			<td>
-				@Html.ActionLink(item.ReceiptDate.ToString("dd.MM.yyyy"), "GetFile", "Payments", new { fileName = @Html.DisplayFor(modelItem => item.Receipt) }, new { @target = "_blank" })
+				@if (item.Receipt.ToString() != "none")
+				{
+					@Html.ActionLink(item.ReceiptDate.ToString("dd.MM.yyyy"), "GetFile", "Payments", new { fileName = @Html.DisplayFor(modelItem => item.Receipt) }, new { @target = "_blank" })
+				}
 			</td>
 		</tr>
 	}
