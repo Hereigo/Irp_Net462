@@ -103,7 +103,7 @@ namespace Irp_Net462.Controllers
 
 				string catAndDate = $"{category}_{DateTime.Now.ToString("yyMMdd_HHmm")}";
 
-				if (orderFile.ContentLength > 0)
+				if (orderFile != null && orderFile.ContentLength > 0)
 				{
 					string orderFileName = $"{catAndDate}_O{Path.GetExtension(orderFile.FileName).ToLower()}";
 
@@ -113,7 +113,7 @@ namespace Irp_Net462.Controllers
 
 					payment.Order = orderFileName;
 				}
-				if (receiptFile.ContentLength > 0)
+				if (receiptFile != null && receiptFile.ContentLength > 0)
 				{
 					string receiptFileName = $"{catAndDate}_R{Path.GetExtension(receiptFile.FileName).ToLower()}";
 

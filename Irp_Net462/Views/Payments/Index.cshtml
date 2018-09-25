@@ -5,40 +5,46 @@
 }
 
 <p>
-	@Html.ActionLink("Create New", "Create")
+	@Html.ActionLink("Додати Документи", "Create")
+	<span style="float:right">
+		@Html.ActionLink("Редагувати Категорії", "Create")
+	</span>
 </p>
 <table class="table">
 	<tr>
-		<th>
-			Period
-		</th>
-		<th>
-			Destination
-		</th>
-		<th>
-			C.1
-		</th>
-		<th>
-			C.2
-		</th>
-		<th>
-			Amount
-		</th>
-		<th>
-			Tarif
-		</th>
-		<th>
-			Order date
-		</th>
-		<th>
-			Receipt date
-		</th>
 		<th></th>
+		<th>
+			Період
+		</th>
+		<th>
+			Категорія
+		</th>
+		<th>
+			Ліч1
+		</th>
+		<th>
+			Ліч2
+		</th>
+		<th>
+			Сума
+		</th>
+		<th>
+			Тариф
+		</th>
+		<th>
+			Рахунок
+		</th>
+		<th>
+			Оплата
+		</th>
 	</tr>
 
 	@foreach (var item in Model)
 	{
 		<tr>
+			<td>
+				@Html.ActionLink(".", "Edit", new { id = item.ID }, new { @class = "glyphicon glyphicon-pencil" })
+			</td>
 			<td>
 				@item.PaymentPeriod.ToString("yyyy-MM")
 			</td>
@@ -62,9 +68,6 @@
 			</td>
 			<td>
 				@Html.ActionLink(item.ReceiptDate.ToString("dd.MM.yyyy"), "GetFile", "Payments", new { fileName = @Html.DisplayFor(modelItem => item.Receipt) }, new { @target = "_blank" })
-			</td>
-			<td>
-				@Html.ActionLink("Edit", "Edit", new { id = item.ID })
 			</td>
 		</tr>
 	}

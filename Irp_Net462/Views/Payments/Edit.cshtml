@@ -4,21 +4,18 @@
 	ViewBag.Title = "Edit";
 }
 @*<style>
-	input[type='file'] {
-		color: transparent;
+	#Order, #Receipt, input[type='file'] {
 		float:left;
 		display:block;
 	}
 </style>*@
-
-<h2>Edit</h2>
 
 @using (Html.BeginForm("Edit", "Payments", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
 	@Html.AntiForgeryToken()
 
 <div class="form-horizontal">
-	<h4>Payment</h4>
+	<h4>Редагування</h4>
 	<hr />
 	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 	@Html.HiddenFor(model => model.ID)
