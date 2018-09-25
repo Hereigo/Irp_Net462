@@ -18,12 +18,12 @@ namespace Irp_Net462.Models
 
 		[Required]
 		[DataType(DataType.Currency, ErrorMessage = "Format is 0.01")]
-		[DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = true)]
+		[DisplayFormat(DataFormatString = "{0:C}")] //, ApplyFormatInEditMode = true)]
 		public float Amount { get; set; }
 
 		[Required]
 		[DataType(DataType.Currency, ErrorMessage = "Format is 0.01")]
-		[DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = true)]
+		[DisplayFormat(DataFormatString = "{0:C}")] //, ApplyFormatInEditMode = true)]
 		public float CurrentTarif { get; set; }
 
 		[Required]

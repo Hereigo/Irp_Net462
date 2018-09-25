@@ -36,6 +36,39 @@ namespace Irp_Net462.Controllers
 			return View(payment);
 		}
 
+		public FilePathResult GetFile(string fileName)
+		{
+			string path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), fileName);
+			string fileExtension = Path.GetExtension(path).ToLower();
+			string mimeType;
+			// https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
+			switch (fileExtension)
+			{
+				case ".png":
+					mimeType = "image/png";
+					break;
+				case ".jpg":
+					mimeType = "image/jpeg";
+					break;
+				case ".jpeg":
+					mimeType = "image/jpeg";
+					break;
+				case ".gif":
+					mimeType = "image/gif";
+					break;
+				case ".bmp":
+					mimeType = "image/bmp";
+					break;
+				case ".pdf":
+					mimeType = "application/pdf";
+					break;
+				default:
+					mimeType = "application/unknown";
+					break;
+			}
+			return new FilePathResult(path, mimeType);
+		}
+
 		// GET: Payments/Create
 		public ActionResult Create()
 		{
@@ -72,7 +105,7 @@ namespace Irp_Net462.Controllers
 
 				if (orderFile.ContentLength > 0)
 				{
-					string orderFileName = $"{catAndDate}_O.{Path.GetExtension(orderFile.FileName)}";
+					string orderFileName = $"{catAndDate}_O{Path.GetExtension(orderFile.FileName).ToLower()}";
 
 					string path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), orderFileName);
 
@@ -82,7 +115,7 @@ namespace Irp_Net462.Controllers
 				}
 				if (receiptFile.ContentLength > 0)
 				{
-					string receiptFileName = $"{catAndDate}_R.{Path.GetExtension(receiptFile.FileName)}";
+					string receiptFileName = $"{catAndDate}_R{Path.GetExtension(receiptFile.FileName).ToLower()}";
 
 					string path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), receiptFileName);
 
@@ -120,10 +153,35 @@ namespace Irp_Net462.Controllers
 		// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit([Bind(Include = "ID,CounterCurrent,CounterPrev,Amount,CurrentTarif,OrderDate,ReceiptDate,PaymentPeriod,Order,Receipt,PaymentCategoryID")] Payment payment)
+		public ActionResult Edit(HttpPostedFileBase orderFile, HttpPostedFileBase receiptFile, [Bind(Include = "ID,CounterCurrent,CounterPrev,Amount,CurrentTarif,OrderDate,ReceiptDate,PaymentPeriod,Order,Receipt,PaymentCategoryID")] Payment payment)
 		{
 			if (ModelState.IsValid)
 			{
+				string category = db.PaymentCategories.Single(c => c.ID == payment.PaymentCategoryID).Name.ToString();
+
+				string catAndDate = $"{category}_{DateTime.Now.ToString("yyMMdd_HHmm")}";
+
+				if (orderFile != null && orderFile.ContentLength > 0)
+				{
+					string orderFileName = $"{catAndDate}_O{Path.GetExtension(orderFile.FileName).ToLower()}";
+
+					string path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), orderFileName);
+
+					orderFile.SaveAs(path);
+
+					payment.Order = orderFileName;
+				}
+				if (receiptFile != null && receiptFile.ContentLength > 0)
+				{
+					string receiptFileName = $"{catAndDate}_R{Path.GetExtension(receiptFile.FileName).ToLower()}";
+
+					string path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), receiptFileName);
+
+					receiptFile.SaveAs(path);
+
+					payment.Receipt = receiptFileName;
+				}
+
 				db.Entry(payment).State = EntityState.Modified;
 				db.SaveChanges();
 				return RedirectToAction("Index");
@@ -132,31 +190,31 @@ namespace Irp_Net462.Controllers
 			return View(payment);
 		}
 
-		// GET: Payments/Delete/5
-		public ActionResult Delete(int? id)
-		{
-			if (id == null)
-			{
-				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-			}
-			Payment payment = db.Payments.Find(id);
-			if (payment == null)
-			{
-				return HttpNotFound();
-			}
-			return View(payment);
-		}
+		//// GET: Payments/Delete/5
+		//public ActionResult Delete(int? id)
+		//{
+		//	if (id == null)
+		//	{
+		//		return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+		//	}
+		//	Payment payment = db.Payments.Find(id);
+		//	if (payment == null)
+		//	{
+		//		return HttpNotFound();
+		//	}
+		//	return View(payment);
+		//}
 
-		// POST: Payments/Delete/5
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public ActionResult DeleteConfirmed(int id)
-		{
-			Payment payment = db.Payments.Find(id);
-			db.Payments.Remove(payment);
-			db.SaveChanges();
-			return RedirectToAction("Index");
-		}
+		//// POST: Payments/Delete/5
+		//[HttpPost, ActionName("Delete")]
+		//[ValidateAntiForgeryToken]
+		//public ActionResult DeleteConfirmed(int id)
+		//{
+		//	Payment payment = db.Payments.Find(id);
+		//	db.Payments.Remove(payment);
+		//	db.SaveChanges();
+		//	return RedirectToAction("Index");
+		//}
 
 		protected override void Dispose(bool disposing)
 		{
