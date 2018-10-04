@@ -12,13 +12,13 @@ namespace Irp_Net462.Controllers
 	[Authorize]
 	public class PaymentsController : Controller
 	{
-		private PaymentsContext db = new PaymentsContext();
+		private readonly PaymentsContext db = new PaymentsContext();
 
 		// GET: Payments
 		public ActionResult Index()
 		{
 			IQueryable<Payment> payments = db.Payments.Include(p => p.PaymentCategory);
-			return View(payments.ToList());
+			return View(payments.OrderByDescending(p => p.PaymentPeriod).ToList());
 		}
 
 		// GET: Payments/Details/5
@@ -36,7 +36,7 @@ namespace Irp_Net462.Controllers
 			return View(payment);
 		}
 
-		public FilePathResult GetFile(string fileName)
+		public FilePathResult GetMyFile(string fileName)
 		{
 			string path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), fileName);
 			string fileExtension = Path.GetExtension(path).ToLower();
@@ -99,11 +99,11 @@ namespace Irp_Net462.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				string category = db.PaymentCategories.Single(c => c.ID == payment.PaymentCategoryID).Name.ToString();
+				string category = db.PaymentCategories.Single(c => c.ID == payment.PaymentCategoryID).Name;
 
 				string catAndDate = $"{category}_{DateTime.Now.ToString("yyMMdd_HHmm")}";
 
-				if (orderFile != null && orderFile.ContentLength > 0)
+				if (orderFile?.ContentLength > 0)
 				{
 					string orderFileName = $"{catAndDate}_O{Path.GetExtension(orderFile.FileName).ToLower()}";
 
@@ -113,7 +113,7 @@ namespace Irp_Net462.Controllers
 
 					payment.Order = orderFileName;
 				}
-				if (receiptFile != null && receiptFile.ContentLength > 0)
+				if (receiptFile?.ContentLength > 0)
 				{
 					string receiptFileName = $"{catAndDate}_R{Path.GetExtension(receiptFile.FileName).ToLower()}";
 
@@ -161,7 +161,7 @@ namespace Irp_Net462.Controllers
 
 				string catAndDate = $"{category}_{DateTime.Now.ToString("yyMMdd_HHmm")}";
 
-				if (orderFile != null && orderFile.ContentLength > 0)
+				if (orderFile?.ContentLength > 0)
 				{
 					string orderFileName = $"{catAndDate}_O{Path.GetExtension(orderFile.FileName).ToLower()}";
 
@@ -171,7 +171,7 @@ namespace Irp_Net462.Controllers
 
 					payment.Order = orderFileName;
 				}
-				if (receiptFile != null && receiptFile.ContentLength > 0)
+				if (receiptFile?.ContentLength > 0)
 				{
 					string receiptFileName = $"{catAndDate}_R{Path.GetExtension(receiptFile.FileName).ToLower()}";
 
